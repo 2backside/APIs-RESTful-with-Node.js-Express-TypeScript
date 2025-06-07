@@ -8,5 +8,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.8",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.15.30",
+    "typescript": "^5.8.3"
+  }
 }

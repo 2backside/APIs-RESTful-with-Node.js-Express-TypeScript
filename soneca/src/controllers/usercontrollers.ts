@@ -53,9 +53,9 @@ export class usercontrollers {
             res.send({ message: "Usuário atualizado com sucesso!" })
 
         } catch (error) {
-            if (!req.body.name || Number(req.body.name.length) == 0) {
+            if (!req.body.name || Number(req.body.name.length) === 0) {
                 throw new ValidationError("O nome é obrigatório");
-            } else if (!req.body.email || Number(req.body.email.length) == 0) {
+            } else if (!req.body.email || Number(req.body.email.length) === 0) {
                 throw new ValidationError("O email é obrigatório");
             } else {
                 next(error);

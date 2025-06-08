@@ -1,5 +1,5 @@
 import express from 'express';
-import { initializeApp } from 'firebase-admin';
+import { initializeApp } from 'firebase-admin/app';
 import { router } from './routes';
 
 initializeApp()

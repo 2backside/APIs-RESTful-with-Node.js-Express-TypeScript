@@ -12,8 +12,11 @@ export class UsersController {
     static getAll(req: Request, res: Response) {
             res.send(lista_de_usuarios)
     } static getById(req: Request, res: Response) {
+
             res.send(lista_de_usuarios.find(user => user.id === Number(req.params.id)));
+
     } static update(req: Request, res: Response) {
+
             let _id = Number(req.params.id)
             let _body = req.body
             const IndexOf = lista_de_usuarios.findIndex(_users => _users.id === _id)
@@ -24,7 +27,9 @@ export class UsersController {
             } else {
                 res.send({"message": "Usuário não encontrado"})
             }
+
     } static delete(req: Request, res: Response) {
+
             let _id = Number(req.params.id);
             const OfIndex = lista_de_usuarios.findIndex(_users => _users.id === _id)
             if (OfIndex !== -1) {
@@ -33,10 +38,12 @@ export class UsersController {
             } else {
                 res.send({"message" : "Usuário não encontrado"})
             }
+
     } static save(req: Request, res: Response) {
             const users = req.body;
             users.id = ++id;
             lista_de_usuarios.push(users);
             res.send({"message": "Usuário adicionado com sucesso!"});   
+            
         }
     }

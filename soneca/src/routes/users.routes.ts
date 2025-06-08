@@ -7,7 +7,7 @@ userRoutes.get("/", usercontrollers.Gethome)
 
 userRoutes.put("/users/:id", usercontrollers.PutUser)
 userRoutes.get("/users/", usercontrollers.GetAll)
-userRoutes.get("/users/:id", usercontrollers.GetbyId)
+userRoutes.get("/users/:id", usercontrollers.GetById)
 userRoutes.post("/users/", usercontrollers.PostUser)
 userRoutes.delete("/users/:id", usercontrollers.DeleteUser)
 

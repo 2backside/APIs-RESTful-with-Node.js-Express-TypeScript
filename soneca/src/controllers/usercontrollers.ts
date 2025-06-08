@@ -1,47 +1,62 @@
 import { Request, Response } from 'express';
+import { getFirestore } from 'firebase-admin/firestore';
 
-let id = 0;
 type User = {
   id: number;
   name: string;
   email: string;
 };
-let users_list: User[] = [];
 
 export class usercontrollers{
     
-    static GetbyId (req:Request, res:Response) {
-        res.send(users_list.find(user => user.id === Number(req.params.id)))
+    static async GetById (req: Request, res:Response){
+        const id = req.params.id
+        const snapshot = await getFirestore().collection("users").doc(id).get();
+        res.send({
+            id: snapshot.id,
+            ...snapshot.data()
+        })
+
     }  
     
-    static GetAll (req:Request, res:Response) {
-        res.send(users_list)
-    }  
+    static async GetAll (req:Request, res:Response) {
+        const snapshot = await getFirestore().collection("users").get();
+        const users = snapshot.docs.map(doc => {
+            return {
+                id: doc.id,
+                ...doc.data()
+            }
+        })
+        res.send(users)
+
+    } 
     
-    static PutUser (req:Request, res:Response) {
-        let _body = req.body
-        let _id = Number(req.params.id)
-        let IndexOF = users_list.findIndex(user => user.id === _id)
-        users_list[IndexOF].name = _body.name;
-        users_list[IndexOF].email = _body.email;
+    static async PutUser (req:Request, res:Response) {
+        const id = req.params.id
+        const body = req.body as User
+        await getFirestore().collection("users").doc(id).set({
+            name: body.name,
+            email: body.email
+        });
         res.send({message: "Usuário atualizado com sucesso!"})
+
     }
 
-    static DeleteUser (req:Request, res:Response) {
-        let userIndex = users_list.findIndex(user => user.id === Number(req.params.id));
-        if (userIndex !== -1) {
-        users_list.splice(userIndex, 1)
-        res.send({message: "Usuário apagado com sucesso!"})
-        } else {
-        res.send({message: "ERRO 404"})
-        } 
+    static async DeleteUser (req:Request, res:Response) {
+        const id = req.params.id 
+        await getFirestore().collection("users").doc(id).delete();
+        res.send({message: "Usuário deletado com sucesso!"})
+
     }
 
-    static PostUser (req:Request, res:Response) {
-        let user = req.body;
-        user.id = ++id;
-        users_list.push(user);
-        res.send({ message: "Usuário adicionado com sucesso!"})
+    static async PostUser (req:Request, res:Response) {
+        let user = req.body as User
+        await getFirestore().collection("users").add({
+            name: user.name,
+            email: user.email
+        })
+        res.status(201).send({ message: "Usuário adicionado com sucesso!"})
+
     }
 
     static Gethome (req:Request, res:Response) {

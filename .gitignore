@@ -4,4 +4,6 @@ plugg2/node_modules/
 soneca/lib/
 plugg/lib/
 plugg2/lib/
-api-restfull.json
+/soneca/api-restfull.json
+/plugg/api-restfull.json
+/plugg2/api-restfull.json

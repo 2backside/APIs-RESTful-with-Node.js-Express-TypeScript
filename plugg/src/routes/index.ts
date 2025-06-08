@@ -1,7 +1,7 @@
 import express from "express";
-import { userRoutes } from "./users_routes";
+import { userRoutes } from "./user.routes";
 
-export const routes = (app: express.Express) => {
-    app.use(express.json())
+export const router = (app: express.Express) => {
+    app.use(express.json());
     app.use(userRoutes);
 }

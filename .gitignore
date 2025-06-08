@@ -1,12 +1,8 @@
-soneca/node_modules/
-plugg/node_modules/
-plugg2/node_modules/
-soneca/lib/
-plugg/lib/
-plugg2/lib/
-/soneca/api-restfull.json
+/plugg/node_modules/
+/plugg/lib/
 /plugg/api-restfull.json
-/plugg2/api-restfull.json
-/plugg2/.env
 /plugg/.env
+/soneca/node_modules/
+/soneca/lib/
+/soneca/api-restfull.json
 /soneca/.env

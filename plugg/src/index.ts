@@ -1,9 +1,14 @@
 import express from "express";
-import { routes } from "./routes/index";
+import { initializeApp } from 'firebase-admin/app';
+import { router } from "./routes";
+import { errorHandler } from "./middlewares/error-handler.middleware";
 
+initializeApp();
 const app = express();
-routes(app)
+
+router(app);
+errorHandler(app);
 
 app.listen(3000, () => {
-    console.log('servidor ativo na porta 3000');
+    console.log("api running");
 });

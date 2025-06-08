@@ -1,11 +1,11 @@
-import {Response, Request} from 'express';
+import { Response, Request } from 'express';
+import { getFirestore } from 'firebase-admin/firestore';
 
 type User = {
     id: number;
     nome: string;
     email: string;
 }
-let id = 0;
 let lista_de_usuarios: User[] = [];
 
 export class UsersController {
@@ -13,22 +13,20 @@ export class UsersController {
 
         res.send("api rodando corretamente.");
 
-    } static getAll (req: Request, res: Response) {
+    } static async getAll (req: Request, res: Response) {
 
-        res.send(lista_de_usuarios);
+        const snapshot = await getFirestore().collection("users").get()
+        const users = snapshot.docs.map(doc => {
+            return doc.data() as User;
+        })
+        res.send(users)
 
-    } static create (req: Request, res: Response) {
-        
-        const { email, nome } = req.body;
-        if (email && nome) {
-            id = ++id
-            const usuario: User = {email, nome, id}
-            lista_de_usuarios.push(usuario)
-            res.send({"message" : "Usuário criado com sucesso!"});
-        } else {
-            res.send({"message" : "'email' ou 'nome' não fornecido."});
-        }
-        
+    } static async create (req: Request, res: Response) {
+
+        const user = req.body;
+        await getFirestore().collection("users").add(user)
+        res.send('usuário criado com sucesso')
+
     } static getById (req: Request, res:Response){
 
         const _id = Number(req.params.id)

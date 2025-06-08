@@ -36,14 +36,14 @@ export class UsersController {
                 nome: user.nome,
                 email: user.email
             })
-            res.status(201).send({ "message": "usuário criado com sucesso" })
+            res.status(201).send({ "message": "usuário criado com sucesso" });
         } catch (error) {
             if (!req.body.nome || Number(req.body.nome?.length) === 0) {
-                throw new ValidationError("Nome precisa ser fornecido")
+                throw new ValidationError("Nome precisa ser fornecido");
             } else if (!req.body.email || Number(req.body.name?.length) === 0) {
-                throw new ValidationError("Email precisa ser fornecido")
+                throw new ValidationError("Email precisa ser fornecido");
             } else {
-                next(error)
+                next(error);
             }
         }
 

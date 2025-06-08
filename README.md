@@ -1,6 +1,6 @@
 # the terminal
 
-<a href="https://www.httpstatus.com.br/">HttpStatus</a>
+<a href="https://www.httpstatus.com.br/" target="_blank">HttpStatus</a>
 
 <ul>
   <li><b>npm</b> init -y</li>

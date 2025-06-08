@@ -1,9 +1,9 @@
-npm init -y
+# the terminal
 
-npm i express
-
-npm i -D @tsconfig/recommended @types/express @types/node tsc-watch typescript
-
-npx tsc --init
-
-npx tsc-watch --onSuccess \"node ./lib/index.js\"
+<ul>
+  <li><b>npm</b> init -y</li>
+  <li><b>npm</b> i express</li>
+  <li><b>npm</b> i -D @tsconfig/recommended @types/express @types/node tsc-watch typescript</li>
+  <li><b>npx</b> tsc --init</li>
+  <li><b>npx</b> tsc-watch --onSuccess \"node ./lib/index.js\"</li>
+</ul>

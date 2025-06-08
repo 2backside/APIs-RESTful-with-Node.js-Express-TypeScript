@@ -1,69 +1,60 @@
-import {Response, Request} from 'express';
+import { Response, Request } from 'express';
+import { getFirestore } from 'firebase-admin/firestore';
 
 type User = {
     id: number;
     nome: string;
     email: string;
 }
-let id = 0;
-let lista_de_usuarios: User[] = [];
 
 export class UsersController {
     static home (req: Request, res: Response) {
 
         res.send("api rodando corretamente.");
 
-    } static getAll (req: Request, res: Response) {
+    } static async getAll (req: Request, res: Response) {
 
-        res.send(lista_de_usuarios);
+        const snapshot = await getFirestore().collection("users").get()
+        const users = snapshot.docs.map(doc => {
+            return {
+                ...doc.data(),
+                id: doc.id
+            }
+        })
 
-    } static create (req: Request, res: Response) {
+        res.send(users)
+
+    } static async create (req: Request, res: Response) {
+        const user = req.body as User
+        await getFirestore().collection("users").add({
+            nome: user.nome,
+            email: user.email
+        })
+        res.status(201).send({"message": "usuário criado com sucesso"})
+
+    } static async getById (req: Request, res:Response){
         
-        const { email, nome } = req.body;
-        if (email && nome) {
-            id = ++id
-            const usuario: User = {email, nome, id}
-            lista_de_usuarios.push(usuario)
-            res.send({"message" : "Usuário criado com sucesso!"});
-        } else {
-            res.send({"message" : "'email' ou 'nome' não fornecido."});
-        }
-        
-    } static getById (req: Request, res:Response){
+        const id = req.params.id
+        const snapshot = await getFirestore().collection("users").doc(id).get();
+        res.send({
+            ...snapshot.data(),
+            id: snapshot.id
+        });
 
-        const _id = Number(req.params.id)
-        const OfIndex = lista_de_usuarios.findIndex(_user => _user.id === _id) 
-        if (OfIndex !== -1) {
-            res.send(lista_de_usuarios[OfIndex]);
-        } else {
-            res.send({"message": "Usuário não encontrado."})
-        }
+    } static async update (req: Request, res: Response) {
 
-    } static update (req: Request, res: Response) {
+        const _id = String(req.params.id);
+        const _body = req.body
+        await getFirestore().collection("users").doc(_id).set({
+            nome: _body.nome,
+            email: _body.email
+        })
+        res.send({"message": "usuário atualizado com sucesso"})
 
-        const _id = Number(req.params.id);
-        const { email, nome } = req.body;
-        const indexof = lista_de_usuarios.findIndex(_user => _user.id === _id);
-        if (indexof !== -1 && email && nome) {
-            lista_de_usuarios[indexof].email = email
-            lista_de_usuarios[indexof].nome = nome
-            res.send({"message": "Usuário atualizado com sucesso!"})
-        } else if (!email || !nome) {
-            res.send({"message": "'email' ou 'nome' não fornecido."})
-        } else {
-            res.send({"message": "Usuário não encontrado..."})
-        }
+    } static async delete (req: Request, res: Response) {
 
-    } static delete (req: Request, res: Response) {
-
-        const _id = Number(req.params.id)
-        const indexOf = lista_de_usuarios.findIndex(_user => _user.id === _id)
-        if (indexOf !== -1) {
-            lista_de_usuarios.splice(indexOf, 1)
-            res.send({"message":"usuário deletado com sucesso"})
-        } else {
-            res.send({"message":"usuário não encontrado"})
-        }
-
+        const _id = req.params.id
+        await getFirestore().collection("users").doc(_id).delete()
+        res.send({"message": "usuário removido com sucesso"})
     }
 }

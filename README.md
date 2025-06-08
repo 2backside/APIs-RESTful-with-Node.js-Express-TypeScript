@@ -1,4 +1,5 @@
 # the terminal
+https://www.httpstatus.com.br/
 
 <ul>
   <li><b>npm</b> init -y</li>

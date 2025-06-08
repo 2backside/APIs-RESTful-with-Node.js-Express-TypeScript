@@ -7,3 +7,5 @@ plugg2/lib/
 /soneca/api-restfull.json
 /plugg/api-restfull.json
 /plugg2/api-restfull.json
+/plugg2/.env
+/plugg/.env

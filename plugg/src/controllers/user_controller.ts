@@ -10,12 +10,11 @@ type User = {
 
 export class UsersController {
     static home(req: Request, res: Response, next: NextFunction) {
-
-        res.send("api rodando corretamente.");
-
-    } static async getAll(req: Request, res: Response, next: NextFunction) {
+        res.send("fucnionando corretamente.");
+    }
+    static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            // throw new Error("Erro aleatorio ai")
+            // throw new Error("Random error")
             const snapshot = await getFirestore().collection("users").get()
             const users = snapshot.docs.map(doc => {
                 return {
@@ -28,8 +27,8 @@ export class UsersController {
         } catch (error) {
             next(error);
         }
-
-    } static async create(req: Request, res: Response, next: NextFunction) {
+    }
+    static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const user = req.body as User
             await getFirestore().collection("users").add({
@@ -38,6 +37,7 @@ export class UsersController {
             })
             res.status(201).send({ "message": "usuário criado com sucesso" });
         } catch (error) {
+
             const nome = req.body.nome?.trim();
             const email = req.body.email?.trim();
 
@@ -51,9 +51,8 @@ export class UsersController {
                 next(error)
             }
         }
-
-    } static async getById(req: Request, res: Response, next: NextFunction) {
-
+    }
+    static async getById(req: Request, res: Response, next: NextFunction) {
         try {
             const id = req.params.id
             const snapshot = await getFirestore().collection("users").doc(id).get();
@@ -64,9 +63,8 @@ export class UsersController {
         } catch (error) {
             next(error);
         }
-
-    } static async update(req: Request, res: Response, next: NextFunction) {
-
+    }
+    static async update(req: Request, res: Response, next: NextFunction) {
         try {
             const _id = String(req.params.id);
             const _body = req.body
@@ -78,8 +76,8 @@ export class UsersController {
         } catch (error) {
             next(error);
         }
-
-    } static async delete(req: Request, res: Response, next: NextFunction) {
+    }
+    static async delete(req: Request, res: Response, next: NextFunction) {
         try {
             const _id = req.params.id
             await getFirestore().collection("users").doc(_id).delete()

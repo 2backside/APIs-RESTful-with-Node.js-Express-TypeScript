@@ -10,5 +10,7 @@ router(app);
 errorHandler(app);
 
 app.listen(3000, () => {
-    console.log("api running");
+    console.log({
+      message : "OK"
+    });
 });

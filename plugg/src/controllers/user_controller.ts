@@ -15,6 +15,7 @@ export class UsersController {
 
     } static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
+            // throw new Error("Erro aleatorio ai")
             const snapshot = await getFirestore().collection("users").get()
             const users = snapshot.docs.map(doc => {
                 return {

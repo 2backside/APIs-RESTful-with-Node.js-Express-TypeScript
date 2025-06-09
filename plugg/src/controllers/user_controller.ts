@@ -15,7 +15,6 @@ export class UsersController {
 
     } static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
-            // throw new Error("Erro aleatorio ai")
             const snapshot = await getFirestore().collection("users").get()
             const users = snapshot.docs.map(doc => {
                 return {
@@ -38,12 +37,17 @@ export class UsersController {
             })
             res.status(201).send({ "message": "usuário criado com sucesso" });
         } catch (error) {
-            if (!req.body.nome || Number(req.body.nome?.length) === 0) {
-                throw new ValidationError("Nome precisa ser fornecido");
-            } else if (!req.body.email || Number(req.body.name?.length) === 0) {
-                throw new ValidationError("Email precisa ser fornecido");
+            const nome = req.body.nome?.trim();
+            const email = req.body.email?.trim();
+
+            if (!nome && !email) {
+                throw new ValidationError("Você precisa fornecer email e nome");
+            } else if (!nome) {
+                throw new ValidationError("Nome não foi fornecido");
+            } else if (!email) {
+                throw new ValidationError("Email não foi fornecido");
             } else {
-                next(error);
+                next(error)
             }
         }
 

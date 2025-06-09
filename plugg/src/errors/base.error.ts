@@ -5,6 +5,13 @@ export class ErrorBase extends Error {
         super(message);
     }
     send(res: Response) {
-        res.status(this.status).send(this.message);
+        res.status(this.status).send({
+            message: this.message,
+        });
+        console.log({
+            name: this.name,
+            message: this.message,
+            stack: this.stack
+        })
     }
 }

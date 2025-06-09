@@ -54,12 +54,12 @@ export class usercontrollers {
             const id = req.params.id
             const body = req.body as User
     
-            if (!body.name || Number(body.name?.length) === 0) {
+            if ((!body.email || Number(body.email?.length) === 0) && (!body.name || Number(body.name?.length) === 0)) {
+                throw new ValidationError("O nome e o e-mail são obrigatórios");
+            } else if (!body.name || Number(body.name?.length) === 0) {
                 throw new ValidationError("O nome é obrigatório");
             } else if (!body.email || Number(body.email?.length) === 0) {
                 throw new ValidationError("O e-mail é obrigatório");
-            } else if ((!body.email || Number(body.email?.length) === 0) && (!body.email || Number(!body.name || Number(body.name?.length)) === 0)) {
-                throw new ValidationError("O nome e o e-mail são obrigatórios");
             }
 
             const snapshot = await getFirestore().collection("users").doc(id).get();

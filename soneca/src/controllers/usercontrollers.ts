@@ -14,9 +14,10 @@ export class usercontrollers {
     }
 
     static async PutUser(req: Request, res: Response, next: NextFunction) {
+        const id = req.params.id
         const user = req.body as User
-        await new UserService().PutUser(user)
-        res.send("Atualização realizada com sucesso.");
+        await new UserService().PutUser(id, user)
+        res.send({message: "Atualização realizada com sucesso."});
 
     }
 
@@ -29,7 +30,7 @@ export class usercontrollers {
     static async PostUser(req: Request, res: Response, next: NextFunction) {
         const user = req.body as User
         await new UserService().PostUser(user)
-        res.status(201).send("Usuário criado com sucesso.");
+        res.status(201).send({message: "Usuário criado com sucesso."});
 
     }
 

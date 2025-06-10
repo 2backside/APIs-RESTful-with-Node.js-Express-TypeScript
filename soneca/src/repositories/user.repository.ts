@@ -1,6 +1,5 @@
 import { getFirestore } from "firebase-admin/firestore";
 import { User } from "../models/user.models";
-import { NotFound } from "../errors/not-found.error";
 
 export class UserRepository {
 
@@ -14,17 +13,15 @@ export class UserRepository {
         }) as User[];
     }
 
-    async PutUser(user: User): Promise<void> {
-        const DocRef = getFirestore().collection("users").doc(user.id);
+    async PutUser(id: string, user: User): Promise<void | boolean> {
+        const DocRef = getFirestore().collection("users").doc(id);
 
         if ((await (DocRef.get())).exists) {
             await DocRef.set({
-                id: user.id,
                 name: user.name,
                 email: user.email
             })
-            throw new NotFound("Usuário não encontrado.");
-        }
+        } else { return false}
     }
 
     async DeleteUser(id: string): Promise<void> {
@@ -39,13 +36,13 @@ export class UserRepository {
         });
     }
 
-    async GetById(id: string): Promise<{ id: string }> {
+    async GetById(id: string): Promise<User | boolean> {
         const snapshot = await getFirestore().collection("users").doc(id).get();
         if (snapshot.exists) {
             return ({
                 id: snapshot.id,
                 ...snapshot.data()
-            })
-        } else { throw new NotFound("Usuário não encontrado.") }
+            }) as User
+        } else { return false }
     }
 }

@@ -1,3 +1,4 @@
+import { NotFound } from "../errors/not-found.error";
 import { User } from "../models/user.models";
 import { UserRepository } from "../repositories/user.repository";
 
@@ -5,15 +6,17 @@ export class UserService {
     private UserRepository: UserRepository
 
     constructor() {
-        this.UserRepository  = new UserRepository();
+        this.UserRepository = new UserRepository();
     }
 
     async GetAll(): Promise<User[]> {
         return this.UserRepository.GetAll();
     }
 
-    async PutUser(user:User): Promise<void> {
-        return this.UserRepository.PutUser(user)
+    async PutUser(id: string, user: User): Promise<void> {
+        const verification = this.UserRepository.PutUser(id, user)
+        if (!verification) 
+            {throw new NotFound("Usuário não encontrado.");}
 
     }
 
@@ -21,11 +24,16 @@ export class UserService {
         return this.UserRepository.DeleteUser(id)
     }
 
-    async PostUser(user:User): Promise<void> {
+    async PostUser(user: User): Promise<void> {
         return this.UserRepository.PostUser(user)
     }
 
-    async GetById(id: string): Promise<{id: string}> {
-        return this.UserRepository.GetById(id)
+    async GetById(id: string): Promise<User | boolean> {
+        const verification = this.UserRepository.GetById(id)
+        if (!verification) {
+            throw new NotFound("Usuário não encontrado.")
+        } else {
+            return verification
+        }
     }
 }

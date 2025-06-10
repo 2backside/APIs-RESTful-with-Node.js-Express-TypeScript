@@ -1,36 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
-import { getFirestore } from 'firebase-admin/firestore';
-import { ValidationError } from '../errors/validation.error';
-import { NotFound } from '../errors/not-found.error';
 import { User } from '../models/user.models'
+import { UserService } from '../services/user.service';
 
 export class usercontrollers {
 
     static async GetById(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        const snapshot = await getFirestore().collection("users").doc(id).get();
-        if (snapshot.exists) {
-            res.send({
-                id: snapshot.id,
-                ...snapshot.data()
-            });
-        }
-        else {
-            throw new NotFound("ID do usuário não encontrado.")
-        }
-
+        res.send(await new UserService().GetById(id));
     }
 
     static async GetAll(req: Request, res: Response, next: NextFunction) {
-        const snapshot = await getFirestore().collection("users").get();
-        const users = snapshot.docs.map(doc => {
-            return {
-                id: doc.id,
-                ...doc.data()
-            }
-        })
-        res.send(users)
-
+        res.send(await new UserService().GetAll());
     }
 
     static async PutUser(req: Request, res: Response, next: NextFunction) {
@@ -38,45 +18,21 @@ export class usercontrollers {
         const body = req.body as User
         const name = body.name
         const email = body.email
-
-        if ((!body.email || Number(body.email?.length) === 0) && (!body.name || Number(body.name?.length) === 0)) {
-            throw new ValidationError("O nome e o e-mail são obrigatórios");
-        } else if (!body.name || Number(body.name?.length) === 0) {
-            throw new ValidationError("O nome é obrigatório");
-        } else if (!body.email || Number(body.email?.length) === 0) {
-            throw new ValidationError("O e-mail é obrigatório");
-        }
-
-        const DocRef = getFirestore().collection("users").doc(id);
-
-        if ((await (DocRef.get())).exists) {
-            await DocRef.set({
-                name: name,
-                email: email
-            })
-            res.send({ message: "Usuário atualizado com sucesso!" })
-        } else {
-            throw new NotFound("ID do usuário não encontrado.")
-        };
+        res.send(await new UserService().PutUser(id,name,email));
 
     }
 
     static async DeleteUser(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id
-        await getFirestore().collection("users").doc(id).delete();
-        res.status(204).end()
+        res.status(204).send(await new UserService().DeleteUser(id));
 
     }
 
     static async PostUser(req: Request, res: Response, next: NextFunction) {
         const body = req.body as User
-
-        await getFirestore().collection("users").add({
-            name: body.name,
-            email: body.email
-        })
-        res.status(201).send({ message: "Usuário adicionado com sucesso!" })
-
+        const name = body.name
+        const email = body.email
+        res.status(201).send(await new UserService().PostUser(name,email))
 
     }
 

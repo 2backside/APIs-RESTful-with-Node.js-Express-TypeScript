@@ -10,26 +10,28 @@ export class UserService {
     }
 
     async GetAll(): Promise<User[]> {
-        return this.UserRepository.GetAll();
+        return await this.UserRepository.GetAll();
     }
 
     async PutUser(user: User): Promise<void> {
-        const verification = this.UserRepository.PutUser(user)
-        if (!verification) 
-            {throw new NotFound("Usuário não encontrado.");}
+        const verification = await this.UserRepository.GetById(user)
+        if (!verification) { throw new NotFound("Usuário não encontrado."); }
+        else {
+            await this.UserRepository.PutUser(user)
+        }
 
     }
 
     async DeleteUser(user: User): Promise<void> {
-        return this.UserRepository.DeleteUser(user)
+        return await this.UserRepository.DeleteUser(user)
     }
 
     async PostUser(user: User): Promise<void> {
-        return this.UserRepository.PostUser(user)
+        return await this.UserRepository.PostUser(user)
     }
 
     async GetById(user: User): Promise<User | null> {
-        const verification = this.UserRepository.GetById(user)
+        const verification = await this.UserRepository.GetById(user)
         if (!verification) {
             throw new NotFound("Usuário não encontrado.")
         } else {

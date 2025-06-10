@@ -8,7 +8,7 @@ export class UserRepository {
 
     async GetAll(): Promise<User[]> {
         const snapshot = await this.collection.get();
-        return snapshot.docs.map(doc => {
+        return await snapshot.docs.map(doc => {
             return {
                 id: doc.id,
                 ...doc.data()
@@ -17,7 +17,7 @@ export class UserRepository {
     }
 
     async PutUser(user: User): Promise<void> {
-        const DocRef = this.collection.doc(user.id);
+        const DocRef = await this.collection.doc(user.id);
         await DocRef.set({
             name: user.name,
             email: user.email

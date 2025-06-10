@@ -4,7 +4,6 @@ export class AuthService {
     create(User: User): Promise<UserRecord> {
     return getAuth().createUser({
         email: User.email,
-        password: User.password,
         displayName: User.nome
     })
 }

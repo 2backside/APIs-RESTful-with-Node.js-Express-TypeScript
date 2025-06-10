@@ -22,32 +22,25 @@ export class UserRepository {
             };
         }) as User[];
     }
-    async getById(id: string): Promise<User | null> {
-        const user = await this.collection.doc(id).get()
-        const user_data = ({...user.data()})
+    async getById(User: User): Promise<User | null> {
+        const user = await this.collection.doc(User.id).get()
         if (user.exists) {
             return {
-                nome: String(user_data.nome),
-                email: String(user_data.email),
-                id: String(user.id)
+                id: String(User.id),
+                ...user.data()
             } as User
         } else {
             return null;
         }
     }
-    async update(User: User, id: string): Promise<boolean> {
-        const docRef = this.collection.doc(id)
-        if ((await (docRef.get())).exists) {
-            await docRef.set({
-                nome: User.nome,
-                email: User.email
-            })
-            return true
-        } else {
-            return false;
-        }
+    async update(User: User): Promise<void> {
+        const docRef = await this.collection.doc(User.id);
+        await docRef.set({
+            nome: User.nome,
+            email: User.email
+        })
     }
-    async delete(id: string) {
-        await this.collection.doc(id).delete()
+    async delete(User: User) {
+        await this.collection.doc(User.id).delete()
     }
 }

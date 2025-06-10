@@ -9,26 +9,28 @@ export class UserService {
     }
     
     async create(User: User) {
-       return this.userRepository.create(User);
+       return await this.userRepository.create(User);
    }
     async getAll(): Promise<User[]> {
-        return this.userRepository.getAll();
+        return await this.userRepository.getAll();
     }
-    async getByID(id : string): Promise<User> {
-        const user = await this.userRepository.getById(id);
+    async getByID(User: User): Promise<User | boolean> {
+        const user = await this.userRepository.getById(User);
         if (!user) {
             throw new NotFoundError("usuário não encontrado");
         } else {
             return user;
         }
     }
-    async update(User: User, id: string): Promise<void> {
-        const updated = this.userRepository.update(User, id);
-        if (!updated) {
+    async update(User: User): Promise<void> {
+        const get = await this.userRepository.getById(User);
+        if (!get) {
             throw new NotFoundError("usuário não encontrado");
+        } else {
+            return await this.userRepository.update(User);
         }
     }
-     async delete(id: string): Promise<void>{
-        return this.userRepository.delete(id);
+     async delete(User: User): Promise<void>{
+        return await this.userRepository.delete(User);
     }
 }

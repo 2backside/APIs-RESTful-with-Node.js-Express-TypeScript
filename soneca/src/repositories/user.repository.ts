@@ -16,17 +16,12 @@ export class UserRepository {
         }) as User[];
     }
 
-    async PutUser(id: string, user: User): Promise<void | null> {
-        const DocRef = this.collection.doc(id);
-
-        if ((await DocRef.get()).exists) {
-            await DocRef.set({
-                name: user.name,
-                email: user.email
-            });
-        } else {
-            return null;
-        }
+    async PutUser(user: User): Promise<void> {
+        const DocRef = this.collection.doc(user.id);
+        await DocRef.set({
+            name: user.name,
+            email: user.email
+        });
     }
 
     async DeleteUser(id: string): Promise<void> {

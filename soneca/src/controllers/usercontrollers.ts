@@ -14,9 +14,12 @@ export class usercontrollers {
     }
 
     static async PutUser(req: Request, res: Response, next: NextFunction) {
-        const id = req.params.id
-        const user = req.body as User
-        await new UserService().PutUser(id, user)
+        const user = {
+            id: req.params.id,
+            name: req.body.name,
+            email: req.body.email
+        } as User
+        await new UserService().PutUser(user)
         res.send({message: "Atualização realizada com sucesso."});
 
     }

@@ -13,8 +13,8 @@ export class UserService {
         return this.UserRepository.GetAll();
     }
 
-    async PutUser(id: string, user: User): Promise<void> {
-        const verification = this.UserRepository.PutUser(id, user)
+    async PutUser(user: User): Promise<void> {
+        const verification = this.UserRepository.PutUser(user);
         if (!verification) 
             {throw new NotFound("Usuário não encontrado.");}
 

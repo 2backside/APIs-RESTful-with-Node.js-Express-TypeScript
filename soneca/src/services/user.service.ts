@@ -28,7 +28,7 @@ export class UserService {
         return this.UserRepository.PostUser(user)
     }
 
-    async GetById(id: string): Promise<User | boolean> {
+    async GetById(id: string): Promise<User | null> {
         const verification = this.UserRepository.GetById(id)
         if (!verification) {
             throw new NotFound("Usuário não encontrado.")

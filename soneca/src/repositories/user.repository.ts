@@ -1,10 +1,13 @@
-import { getFirestore } from "firebase-admin/firestore";
+import { CollectionReference, getFirestore } from "firebase-admin/firestore";
 import { User } from "../models/user.models";
-
 export class UserRepository {
+    private collection: CollectionReference;
+    constructor() {
+        this.collection = getFirestore().collection("users");
+    }
 
     async GetAll(): Promise<User[]> {
-        const snapshot = await getFirestore().collection("users").get();
+        const snapshot = await this.collection.get();
         return snapshot.docs.map(doc => {
             return {
                 id: doc.id,
@@ -13,36 +16,39 @@ export class UserRepository {
         }) as User[];
     }
 
-    async PutUser(id: string, user: User): Promise<void | boolean> {
-        const DocRef = getFirestore().collection("users").doc(id);
+    async PutUser(id: string, user: User): Promise<void | null> {
+        const DocRef = this.collection.doc(id);
 
-        if ((await (DocRef.get())).exists) {
+        if ((await DocRef.get()).exists) {
             await DocRef.set({
                 name: user.name,
                 email: user.email
-            })
-        } else { return false}
+            });
+        } else {
+            return null;
+        }
     }
 
     async DeleteUser(id: string): Promise<void> {
-        await getFirestore().collection("users").doc(id).delete();
-
+        await this.collection.doc(id).delete();
     }
 
     async PostUser(user: User): Promise<void> {
-        await getFirestore().collection("users").add({
+        await this.collection.add({
             name: user.name,
             email: user.email
         });
     }
 
-    async GetById(id: string): Promise<User | boolean> {
-        const snapshot = await getFirestore().collection("users").doc(id).get();
+    async GetById(id: string): Promise<User | null> {
+        const snapshot = await this.collection.doc(id).get();
         if (snapshot.exists) {
             return ({
                 id: snapshot.id,
                 ...snapshot.data()
-            }) as User
-        } else { return false }
+            }) as User;
+        } else {
+            return null;
+        }
     }
 }

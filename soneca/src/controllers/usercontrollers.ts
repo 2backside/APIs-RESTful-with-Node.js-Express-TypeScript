@@ -2,11 +2,15 @@ import { NextFunction, Request, Response } from 'express';
 import { User } from '../models/user.models'
 import { UserService } from '../services/user.service';
 
-export class usercontrollers {
 
+export class usercontrollers {
     static async GetById(req: Request, res: Response, next: NextFunction) {
-        const id = req.params.id
-        res.send(await new UserService().GetById(id));
+        const user = {
+            id: req.params.id,
+            name: req.body.name,
+            email: req.body.email
+        } as User
+        res.send(await new UserService().GetById(user));
     }
 
     static async GetAll(req: Request, res: Response, next: NextFunction) {
@@ -14,16 +18,23 @@ export class usercontrollers {
     }
 
     static async PutUser(req: Request, res: Response, next: NextFunction) {
-        const id = req.params.id
-        const user = req.body as User
-        await new UserService().PutUser(id, user)
+        const user = {
+            id: req.params.id,
+            name: req.body.name,
+            email: req.body.email
+        } as User
+        await new UserService().PutUser(user)
         res.send({message: "Atualização realizada com sucesso."});
 
     }
 
     static async DeleteUser(req: Request, res: Response, next: NextFunction) {
-        const id = req.params.id
-        res.status(204).send(await new UserService().DeleteUser(id));
+        const user = {
+            id: req.params.id,
+            name: req.body.name,
+            email: req.body.email
+        } as User
+        res.status(204).send(await new UserService().DeleteUser(user));
 
     }
 

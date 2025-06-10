@@ -16,21 +16,16 @@ export class UserRepository {
         }) as User[];
     }
 
-    async PutUser(id: string, user: User): Promise<void | null> {
-        const DocRef = this.collection.doc(id);
-
-        if ((await DocRef.get()).exists) {
-            await DocRef.set({
-                name: user.name,
-                email: user.email
-            });
-        } else {
-            return null;
-        }
+    async PutUser(user: User): Promise<void> {
+        const DocRef = this.collection.doc(user.id);
+        await DocRef.set({
+            name: user.name,
+            email: user.email
+        });
     }
 
-    async DeleteUser(id: string): Promise<void> {
-        await this.collection.doc(id).delete();
+    async DeleteUser(user:User): Promise<void> {
+        await this.collection.doc(user.id).delete();
     }
 
     async PostUser(user: User): Promise<void> {
@@ -40,8 +35,8 @@ export class UserRepository {
         });
     }
 
-    async GetById(id: string): Promise<User | null> {
-        const snapshot = await this.collection.doc(id).get();
+    async GetById(user:User): Promise<User | null> {
+        const snapshot = await this.collection.doc(user.id).get();
         if (snapshot.exists) {
             return ({
                 id: snapshot.id,

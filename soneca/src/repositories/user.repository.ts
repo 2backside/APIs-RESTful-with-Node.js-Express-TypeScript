@@ -24,8 +24,8 @@ export class UserRepository {
         });
     }
 
-    async DeleteUser(id: string): Promise<void> {
-        await this.collection.doc(id).delete();
+    async DeleteUser(user:User): Promise<void> {
+        await this.collection.doc(user.id).delete();
     }
 
     async PostUser(user: User): Promise<void> {
@@ -35,8 +35,8 @@ export class UserRepository {
         });
     }
 
-    async GetById(id: string): Promise<User | null> {
-        const snapshot = await this.collection.doc(id).get();
+    async GetById(user:User): Promise<User | null> {
+        const snapshot = await this.collection.doc(user.id).get();
         if (snapshot.exists) {
             return ({
                 id: snapshot.id,

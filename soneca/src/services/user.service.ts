@@ -14,22 +14,22 @@ export class UserService {
     }
 
     async PutUser(user: User): Promise<void> {
-        const verification = this.UserRepository.PutUser(user);
+        const verification = this.UserRepository.PutUser(user)
         if (!verification) 
             {throw new NotFound("Usuário não encontrado.");}
 
     }
 
-    async DeleteUser(id: string): Promise<void> {
-        return this.UserRepository.DeleteUser(id)
+    async DeleteUser(user: User): Promise<void> {
+        return this.UserRepository.DeleteUser(user)
     }
 
     async PostUser(user: User): Promise<void> {
         return this.UserRepository.PostUser(user)
     }
 
-    async GetById(id: string): Promise<User | null> {
-        const verification = this.UserRepository.GetById(id)
+    async GetById(user: User): Promise<User | null> {
+        const verification = this.UserRepository.GetById(user)
         if (!verification) {
             throw new NotFound("Usuário não encontrado.")
         } else {
